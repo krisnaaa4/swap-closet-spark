@@ -3,8 +3,9 @@ import { useMemo, useState } from "react";
 import {
   Heart, Sparkles, Upload, Phone, ArrowRight, Check, Leaf,
   Recycle, HandHeart, Shirt, MapPin, Star, ShieldCheck, Truck,
-  QrCode, Calculator, X, Search, ClipboardList, Clock, ThumbsUp,
+  QrCode, Calculator, Search, ClipboardList, Clock, ThumbsUp,
   Receipt, Package, WashingMachine, Ban, Tag, Calendar,
+  TreePine, TrendingUp, Award, ChevronRight,
   TreePine, TrendingUp, Award, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
