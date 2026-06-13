@@ -6,7 +6,6 @@ import {
   QrCode, Calculator, Search, ClipboardList, Clock, ThumbsUp,
   Receipt, Package, WashingMachine, Ban, Tag, Calendar,
   TreePine, TrendingUp, Award, ChevronRight,
-  TreePine, TrendingUp, Award, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
