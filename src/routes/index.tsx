@@ -5,7 +5,7 @@ import {
   Recycle, HandHeart, Shirt, MapPin, Star, ShieldCheck, Truck,
   QrCode, Calculator, Search, ClipboardList, Clock, ThumbsUp,
   Receipt, Package, WashingMachine, Ban, Tag, Calendar,
-  TreePine, TrendingUp, Award, ChevronRight,
+  Zap, TrendingUp, Award, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +53,13 @@ const ITEMS: Item[] = [
   { id: "TB-007", img: c7, name: "Pleated Midi Skirt", owner: "Tasya W.", loc: "Tangerang", size: "M", rating: 9.1, outfit: "Office Chic", co2: 7.3, gender: "Wanita" },
   { id: "TB-008", img: c8, name: "Linen Oversize Shirt", owner: "Kayla H.", loc: "Depok", size: "L", rating: 9.0, outfit: "Resort Wear", co2: 9.5, gender: "Wanita" },
 ];
+
+function co2ToAcHours(kg: number): string {
+  const hours = kg / 0.75; // 1 PK AC ≈ 0.75 kg CO₂/jam
+  if (hours >= 8760) return `${(hours / 8760).toFixed(0)} tahun menyalakan AC 1 PK`;
+  if (hours >= 24) return `${(hours / 24).toFixed(0)} hari menyalakan AC 1 PK`;
+  return `${hours.toFixed(1)} jam menyalakan AC 1 PK`;
+}
 
 function Home() {
   return (
@@ -357,7 +364,7 @@ function Catalog() {
                 <Row label="Carbon dihemat vs beli baru" value={`${open.item.co2} kg CO₂`} accent />
               </div>
               <div className="rounded-xl bg-eco/10 p-3 text-xs text-eco">
-                <Leaf className="mr-1 inline h-3.5 w-3.5" /> Setara dengan menanam {(open.item.co2 / 21).toFixed(2)} pohon.
+                <Leaf className="mr-1 inline h-3.5 w-3.5" /> Setara dengan {co2ToAcHours(open.item.co2)}.
               </div>
               <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
                 Lanjutkan ke QRIS <QrCode className="ml-2 h-4 w-4" />
@@ -524,7 +531,7 @@ function Impact() {
               { label: "Total Pcs Diterima", value: "32,109" },
               { label: "Pcs Siap Didonasikan", value: "1,840" },
             ]}
-            badge={{ title: "Total Carbon Saved", value: "184,520 kg CO₂", sub: "Setara dengan menanam 8,786 pohon" }}
+            badge={{ title: "Total Carbon Saved", value: "184,520 kg CO₂", sub: "Setara dengan ~28 tahun menyalakan AC 1 PK" }}
             cta="Donasi Sekarang"
           />
           <ImpactCard
@@ -573,7 +580,7 @@ function ImpactCard({
         ))}
       </div>
       <div className="mt-5 flex items-center gap-3 rounded-2xl bg-eco p-4 text-eco-foreground">
-        <TreePine className="h-8 w-8 shrink-0" />
+        <Zap className="h-8 w-8 shrink-0" />
         <div className="flex-1">
           <p className="text-xs uppercase tracking-widest opacity-80">{badge.title}</p>
           <p className="font-display text-xl font-bold">{badge.value}</p>
@@ -592,7 +599,6 @@ function ImpactCard({
 function TrustFooter() {
   const [clothes, setClothes] = useState(15);
   const co2 = (clothes * 8.4).toFixed(1);
-  const trees = (clothes * 8.4 / 21).toFixed(1);
   const partners = ["QRIS Verified", "JNE Logistics", "SiCepat", "WWF Indonesia", "YPBB Bandung", "Setali ID"];
 
   return (
@@ -627,7 +633,7 @@ function TrustFooter() {
             <Calculator className="h-7 w-7 opacity-80" />
             <p className="text-xs uppercase tracking-widest opacity-80">Potensi Carbon Unlock</p>
             <p className="font-display text-5xl font-bold">{co2} kg CO₂</p>
-            <p className="text-sm opacity-90">Setara dengan menanam <strong>{trees} pohon</strong> dewasa.</p>
+            <p className="text-sm opacity-90">Setara dengan <strong>{co2ToAcHours(clothes * 8.4)}</strong>.</p>
             <Button className="mt-2 w-fit rounded-full bg-eco-foreground text-eco hover:bg-eco-foreground/90">
               Mulai Swap & Klaim Impact <Heart className="ml-2 h-4 w-4 fill-current" />
             </Button>
