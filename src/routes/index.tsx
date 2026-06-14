@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Heart, Sparkles, Upload, Phone, ArrowRight, Check, Leaf,
   Recycle, HandHeart, Shirt, MapPin, Star, ShieldCheck, Truck,
   QrCode, Calculator, Search, ClipboardList, Clock, ThumbsUp,
   Receipt, Package, WashingMachine, Ban, Tag, Calendar,
-  Zap, TrendingUp, Award, ChevronRight,
+  Zap, TrendingUp, Award, ChevronRight, User, LogIn, UserPlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 import heroImg from "@/assets/hero-match.jpg";
