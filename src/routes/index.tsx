@@ -331,7 +331,12 @@ function Catalog() {
 
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map(item => (
-            <article key={item.id} className="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+            <Link
+              key={item.id}
+              to="/item/$id"
+              params={{ id: item.id }}
+              className="group relative block overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+            >
               <div className="relative aspect-[4/5] overflow-hidden bg-muted">
                 <img src={item.img} alt={item.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" width={640} height={768} />
                 <div className="absolute left-3 top-3 rounded-full bg-eco/95 px-2.5 py-1 text-[11px] font-semibold text-eco-foreground backdrop-blur">
@@ -339,11 +344,11 @@ function Catalog() {
                 </div>
                 <div className="absolute right-3 top-3 rounded-full bg-card/90 px-2 py-1 text-[11px] font-medium backdrop-blur">{item.id}</div>
                 <div className="absolute inset-x-3 bottom-3 flex translate-y-3 gap-1.5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                  <Button size="sm" onClick={() => setOpen({ item, mode: "Swap" })} className="flex-1 rounded-full bg-coral text-coral-foreground hover:bg-coral/90">
+                  <Button size="sm" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen({ item, mode: "Swap" }); }} className="flex-1 rounded-full bg-coral text-coral-foreground hover:bg-coral/90">
                     <Heart className="mr-1 h-3.5 w-3.5 fill-current" /> Swap
                   </Button>
-                  <Button size="sm" onClick={() => setOpen({ item, mode: "Beli" })} variant="secondary" className="rounded-full">Beli</Button>
-                  <Button size="sm" onClick={() => setOpen({ item, mode: "Sewa" })} variant="outline" className="rounded-full bg-card">Sewa</Button>
+                  <Button size="sm" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen({ item, mode: "Beli" }); }} variant="secondary" className="rounded-full">Beli</Button>
+                  <Button size="sm" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen({ item, mode: "Sewa" }); }} variant="outline" className="rounded-full bg-card">Sewa</Button>
                 </div>
               </div>
               <div className="p-4">
@@ -359,7 +364,7 @@ function Catalog() {
                   <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-primary">Size {item.size}</span>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>
