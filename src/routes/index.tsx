@@ -78,7 +78,14 @@ function Home() {
 }
 
 /* ---------- NAV ---------- */
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted;
+}
+
 function Nav() {
+  const mounted = useMounted();
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -102,24 +109,26 @@ function Nav() {
           <Button className="gap-2 rounded-full bg-tertiary text-tertiary-foreground hover:bg-tertiary/90 pulse-cta">
             <Upload className="h-4 w-4" /> Upload Pakaian
           </Button>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full text-foreground/80 hover:text-foreground hover:bg-secondary ml-1">
-                <User className="h-5 w-5" />
-                <span className="sr-only">Akun</span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-52 p-2" align="end">
-              <div className="space-y-1">
-                <Link to="/auth" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
-                  <LogIn className="h-4 w-4 text-tertiary" /> Masuk
-                </Link>
-                <Link to="/auth" search={{ tab: "daftar" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
-                  <UserPlus className="h-4 w-4 text-eco" /> Daftar
-                </Link>
-              </div>
-            </PopoverContent>
-          </Popover>
+          {mounted && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full text-foreground/80 hover:text-foreground hover:bg-secondary ml-1">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">Akun</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-52 p-2" align="end">
+                <div className="space-y-1">
+                  <Link to="/auth" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                    <LogIn className="h-4 w-4 text-tertiary" /> Masuk
+                  </Link>
+                  <Link to="/auth" search={{ tab: "daftar" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                    <UserPlus className="h-4 w-4 text-eco" /> Daftar
+                  </Link>
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
       </div>
     </header>
