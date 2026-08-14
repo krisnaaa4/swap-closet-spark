@@ -16,6 +16,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { SwapMeOut } from "@/components/SwapMeOut";
 
 import heroImg from "@/assets/hero-match.jpg";
 import c1 from "@/assets/c1.jpg";
@@ -68,6 +69,7 @@ function Home() {
       <Nav />
       <Hero />
       <HowItWorks />
+      <SwapMeOut />
       <Catalog />
       <TrendSection />
       <Pricing />
@@ -119,7 +121,7 @@ function Nav() {
               </PopoverTrigger>
               <PopoverContent className="w-52 p-2" align="end">
                 <div className="space-y-1">
-                  <Link to="/auth" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                  <Link to="/auth" search={{ tab: "masuk" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
                     <LogIn className="h-4 w-4 text-tertiary" /> Masuk
                   </Link>
                   <Link to="/auth" search={{ tab: "daftar" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
@@ -310,7 +312,7 @@ function Catalog() {
   const items = useMemo(() => tab === "Semua" ? ITEMS : ITEMS.filter(i => i.gender === tab), [tab]);
 
   return (
-    <section className="py-24">
+    <section id="katalog" className="py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
