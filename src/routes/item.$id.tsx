@@ -49,7 +49,8 @@ export const Route = createFileRoute("/item/$id")({
 });
 
 function ItemDetail() {
-  const { item } = Route.useLoaderData();
+  const { id } = Route.useParams();
+  const item = ITEMS.find(i => i.id === id)!;
   const [mode, setMode] = useState<"Swap" | "Beli" | "Sewa" | null>(null);
   const recommendations = ITEMS.filter(i => i.id !== item.id).slice(0, 4);
 
