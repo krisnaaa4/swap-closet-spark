@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { SwapMeOut } from "@/components/SwapMeOut";
+import { SwipeDeck } from "@/components/SwipeDeck";
 
 import heroImg from "@/assets/hero-match.jpg";
 import c1 from "@/assets/c1.jpg";
@@ -69,6 +70,7 @@ function Home() {
       <Nav />
       <Hero />
       <HowItWorks />
+      <SwipeDeck />
       <SwapMeOut />
       <Catalog />
       <TrendSection />
