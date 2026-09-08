@@ -1,10 +1,46 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Heart, X, RotateCcw, Sparkles, MapPin, Leaf, Info, Undo2 } from "lucide-react";
+import { Heart, X, RotateCcw, Sparkles, MapPin, Leaf, Info, Undo2, PackagePlus } from "lucide-react";
+import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { ITEMS, co2ToAcHours, type Item } from "@/lib/items";
+
+const donationSchema = z.object({
+  name: z.string().trim().min(2, "Nama minimal 2 karakter").max(100, "Nama terlalu panjang"),
+  email: z.string().trim().email("Email tidak valid").max(255),
+  phone: z
+    .string()
+    .trim()
+    .min(8, "Nomor WhatsApp tidak valid")
+    .max(20, "Nomor WhatsApp terlalu panjang"),
+  city: z.string().trim().min(2, "Kota wajib diisi").max(100),
+  quantity: z.coerce.number().int().min(1, "Minimal 1 pakaian").max(500, "Maksimal 500 pakaian"),
+  category: z.string().min(1, "Pilih jenis pakaian"),
+  method: z.string().min(1, "Pilih cara pengiriman"),
+  sendDate: z.string().min(1, "Pilih perkiraan tanggal kirim"),
+  notes: z.string().trim().max(500, "Catatan maksimal 500 karakter").optional(),
+});
 
 type Decision = { item: Item; liked: boolean };
 
