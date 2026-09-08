@@ -51,6 +51,7 @@ export function SwipeDeck() {
   const [fly, setFly] = useState<"left" | "right" | null>(null);
   const [drag, setDrag] = useState({ x: 0, y: 0, active: false });
   const start = useRef({ x: 0, y: 0 });
+  const [formOpen, setFormOpen] = useState(false);
 
   const current = deck[index];
   const matches = history.filter(h => h.liked);
