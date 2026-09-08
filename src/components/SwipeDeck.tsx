@@ -299,6 +299,171 @@ export function SwipeDeck() {
           )}
         </div>
       </div>
+
+      <DonationForm open={formOpen} onOpenChange={setFormOpen} />
     </section>
+  );
+}
+
+function DonationForm({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [category, setCategory] = useState("");
+  const [method, setMethod] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const raw = {
+      name: String(fd.get("name") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      phone: String(fd.get("phone") ?? ""),
+      city: String(fd.get("city") ?? ""),
+      quantity: String(fd.get("quantity") ?? ""),
+      category,
+      method,
+      sendDate: String(fd.get("sendDate") ?? ""),
+      notes: String(fd.get("notes") ?? ""),
+    };
+    const parsed = donationSchema.safeParse(raw);
+    if (!parsed.success) {
+      const next: Record<string, string> = {};
+      for (const issue of parsed.error.issues) next[String(issue.path[0])] = issue.message;
+      setErrors(next);
+      return;
+    }
+    setErrors({});
+    setSubmitting(true);
+    window.setTimeout(() => {
+      setSubmitting(false);
+      onOpenChange(false);
+      setCategory("");
+      setMethod("");
+      toast.success("Formulir terkirim!", {
+        description: `Terima kasih, ${parsed.data.name}. Tim kami akan menghubungi kamu lewat WhatsApp untuk instruksi pengiriman ${parsed.data.quantity} pakaian.`,
+      });
+    }, 700);
+  };
+
+  const err = (k: string) =>
+    errors[k] ? <p className="mt-1 text-xs text-coral">{errors[k]}</p> : null;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle className="font-display text-2xl text-primary">Kirim Pakaianmu</DialogTitle>
+          <DialogDescription>
+            Titipkan tumpukan pakaianmu ke tim Tukar Baju. Kami yang urus sortir, verifikasi, dan
+            pencocokan swap-nya.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={onSubmit} className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="tb-name">Nama lengkap</Label>
+              <Input id="tb-name" name="name" maxLength={100} placeholder="Nama kamu" className="mt-1.5" />
+              {err("name")}
+            </div>
+            <div>
+              <Label htmlFor="tb-phone">Nomor WhatsApp</Label>
+              <Input id="tb-phone" name="phone" maxLength={20} placeholder="08xxxxxxxxxx" className="mt-1.5" />
+              {err("phone")}
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="tb-email">Email</Label>
+              <Input id="tb-email" name="email" type="email" maxLength={255} placeholder="nama@email.com" className="mt-1.5" />
+              {err("email")}
+            </div>
+            <div>
+              <Label htmlFor="tb-city">Kota asal pengiriman</Label>
+              <Input id="tb-city" name="city" maxLength={100} placeholder="Bandung" className="mt-1.5" />
+              {err("city")}
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="tb-qty">Jumlah pakaian (pcs)</Label>
+              <Input id="tb-qty" name="quantity" type="number" min={1} max={500} placeholder="12" className="mt-1.5" />
+              {err("quantity")}
+            </div>
+            <div>
+              <Label htmlFor="tb-date">Perkiraan tanggal kirim</Label>
+              <Input id="tb-date" name="sendDate" type="date" className="mt-1.5" />
+              {err("sendDate")}
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label>Jenis pakaian dominan</Label>
+              <Select value={category} onValueChange={setCategory}>
+                <SelectTrigger className="mt-1.5">
+                  <SelectValue placeholder="Pilih jenis" />
+                </SelectTrigger>
+                <SelectContent>
+                  {["Atasan", "Bawahan", "Outerwear", "Dress & Rok", "Campuran"].map(c => (
+                    <SelectItem key={c} value={c}>{c}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {err("category")}
+            </div>
+            <div>
+              <Label>Cara pengiriman</Label>
+              <Select value={method} onValueChange={setMethod}>
+                <SelectTrigger className="mt-1.5">
+                  <SelectValue placeholder="Pilih cara" />
+                </SelectTrigger>
+                <SelectContent>
+                  {["Kurir ekspedisi", "Dijemput kurir kami", "Antar ke drop point"].map(m => (
+                    <SelectItem key={m} value={m}>{m}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {err("method")}
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="tb-notes">Catatan (opsional)</Label>
+            <Textarea
+              id="tb-notes"
+              name="notes"
+              maxLength={500}
+              rows={3}
+              placeholder="Contoh: 3 jaket agak pudar, sisanya kondisi bagus."
+              className="mt-1.5"
+            />
+            {err("notes")}
+          </div>
+
+          <p className="rounded-xl bg-secondary p-3 text-xs text-muted-foreground">
+            Dengan mengirim formulir ini, kamu menghibahkan pakaian tersebut kepada Tukar Baju agar bisa
+            langsung di-swap orang lain tanpa persetujuan ulang.
+          </p>
+
+          <DialogFooter>
+            <Button type="button" variant="outline" className="rounded-full" onClick={() => onOpenChange(false)}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={submitting} className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
+              {submitting ? "Mengirim…" : "Kirim Formulir"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
