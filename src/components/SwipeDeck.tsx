@@ -78,10 +78,25 @@ export function SwipeDeck() {
           <h2 className="font-display text-4xl font-bold leading-tight tracking-tight md:text-5xl">
             Geser Kanan untuk <span className="text-tertiary">Ajukan Swap</span>, Kiri untuk Lewati
           </h2>
-          <p className="mt-4 max-w-lg text-lg text-primary-foreground/75">
-            Cari pakaian seperti mencari jodoh. Satu kartu, satu keputusan — semua item sudah diverifikasi
-            kondisinya oleh tim Tukar Baju.
-          </p>
+          <div className="mt-4 max-w-lg space-y-3 text-base text-primary-foreground/75">
+            <p>
+              Punya tumpukan pakaian yang tidak ingin dijual atau didonasikan, dan hanya ingin dititipkan
+              kepada kami? Kirimkan saja tumpukan itu ke tim Tukar Baju.
+            </p>
+            <p>
+              Pakaian yang sudah dihibahkan akan kami rawat, verifikasi, dan tampilkan di sini — sehingga
+              siapa pun yang tertarik bisa langsung swap tanpa menunggu persetujuan pemilik. Prosesnya jauh
+              lebih cepat.
+            </p>
+          </div>
+
+          <Button
+            onClick={() => setFormOpen(true)}
+            className="mt-6 gap-2 rounded-full bg-tertiary px-6 text-tertiary-foreground hover:bg-tertiary/90"
+          >
+            <PackagePlus className="h-4 w-4" /> Kirim Pakaian
+          </Button>
+
 
           <div className="mt-8 grid max-w-md grid-cols-3 gap-3">
             {[
