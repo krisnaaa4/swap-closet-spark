@@ -18,6 +18,8 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { SwapMeOut } from "@/components/SwapMeOut";
 import { SwipeDeck } from "@/components/SwipeDeck";
+import { ClothesRequests } from "@/components/ClothesRequests";
+
 
 import heroImg from "@/assets/hero-match.jpg";
 import c1 from "@/assets/c1.jpg";
@@ -71,6 +73,8 @@ function Home() {
       <Hero />
       <HowItWorks />
       <SwipeDeck />
+      <ClothesRequests />
+
       <SwapMeOut />
       <Catalog />
       <TrendSection />
@@ -105,6 +109,9 @@ function Nav() {
               {l}
             </a>
           ))}
+          <Link to="/permintaan" className="relative text-foreground/80 transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-tertiary after:transition-all hover:after:w-full">
+            Clothes Request
+          </Link>
         </nav>
         <div className="flex items-center gap-2">
           <Button variant="ghost" className="gap-2 text-foreground/80 hover:text-foreground">
