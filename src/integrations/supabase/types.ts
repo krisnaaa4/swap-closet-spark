@@ -14,7 +14,102 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      b2b_partners: {
+        Row: {
+          city: string | null
+          contact_name: string
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          org_name: string
+          org_type: string
+          phone: string | null
+          status: string
+          user_id: string | null
+          volume_estimate: string | null
+        }
+        Insert: {
+          city?: string | null
+          contact_name: string
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          org_name: string
+          org_type: string
+          phone?: string | null
+          status?: string
+          user_id?: string | null
+          volume_estimate?: string | null
+        }
+        Update: {
+          city?: string | null
+          contact_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          org_name?: string
+          org_type?: string
+          phone?: string | null
+          status?: string
+          user_id?: string | null
+          volume_estimate?: string | null
+        }
+        Relationships: []
+      }
+      listings: {
+        Row: {
+          ai_confidence: number | null
+          brand: string | null
+          category: string | null
+          condition: string | null
+          created_at: string
+          description: string | null
+          gender: string | null
+          id: string
+          photo_urls: string[] | null
+          price: number | null
+          size: string | null
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          ai_confidence?: number | null
+          brand?: string | null
+          category?: string | null
+          condition?: string | null
+          created_at?: string
+          description?: string | null
+          gender?: string | null
+          id?: string
+          photo_urls?: string[] | null
+          price?: number | null
+          size?: string | null
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          ai_confidence?: number | null
+          brand?: string | null
+          category?: string | null
+          condition?: string | null
+          created_at?: string
+          description?: string | null
+          gender?: string | null
+          id?: string
+          photo_urls?: string[] | null
+          price?: number | null
+          size?: string | null
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
