@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PermintaanRouteImport } from './routes/permintaan'
+import { Route as B2bRouteImport } from './routes/b2b'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ItemIdRouteImport } from './routes/item.$id'
@@ -17,6 +18,11 @@ import { Route as ItemIdRouteImport } from './routes/item.$id'
 const PermintaanRoute = PermintaanRouteImport.update({
   id: '/permintaan',
   path: '/permintaan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const B2bRoute = B2bRouteImport.update({
+  id: '/b2b',
+  path: '/b2b',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -38,12 +44,14 @@ const ItemIdRoute = ItemIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/b2b': typeof B2bRoute
   '/permintaan': typeof PermintaanRoute
   '/item/$id': typeof ItemIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/b2b': typeof B2bRoute
   '/permintaan': typeof PermintaanRoute
   '/item/$id': typeof ItemIdRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/b2b': typeof B2bRoute
   '/permintaan': typeof PermintaanRoute
   '/item/$id': typeof ItemIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/permintaan' | '/item/$id'
+  fullPaths: '/' | '/auth' | '/b2b' | '/permintaan' | '/item/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/permintaan' | '/item/$id'
-  id: '__root__' | '/' | '/auth' | '/permintaan' | '/item/$id'
+  to: '/' | '/auth' | '/b2b' | '/permintaan' | '/item/$id'
+  id: '__root__' | '/' | '/auth' | '/b2b' | '/permintaan' | '/item/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  B2bRoute: typeof B2bRoute
   PermintaanRoute: typeof PermintaanRoute
   ItemIdRoute: typeof ItemIdRoute
 }
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/permintaan'
       fullPath: '/permintaan'
       preLoaderRoute: typeof PermintaanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/b2b': {
+      id: '/b2b'
+      path: '/b2b'
+      fullPath: '/b2b'
+      preLoaderRoute: typeof B2bRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  B2bRoute: B2bRoute,
   PermintaanRoute: PermintaanRoute,
   ItemIdRoute: ItemIdRoute,
 }
