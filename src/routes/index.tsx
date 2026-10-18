@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { SwapMeOut } from "@/components/SwapMeOut";
 import { SwipeDeck } from "@/components/SwipeDeck";
 import { ClothesRequests } from "@/components/ClothesRequests";
+import { SmartListing } from "@/components/SmartListing";
 
 
 import heroImg from "@/assets/hero-match.jpg";
@@ -94,6 +95,7 @@ function useMounted() {
 
 function Nav() {
   const mounted = useMounted();
+  const [smartListingOpen, setSmartListingOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -112,14 +114,18 @@ function Nav() {
           <Link to="/permintaan" className="relative text-foreground/80 transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-tertiary after:transition-all hover:after:w-full">
             Clothes Request
           </Link>
+          <Link to="/b2b" className="relative text-foreground/80 transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-tertiary after:transition-all hover:after:w-full">
+            B2B Portal
+          </Link>
         </nav>
         <div className="flex items-center gap-2">
           <Button variant="ghost" className="gap-2 text-foreground/80 hover:text-foreground">
             <Phone className="h-4 w-4" /> Hubungi Kami
           </Button>
-          <Button className="gap-2 rounded-full bg-tertiary text-tertiary-foreground hover:bg-tertiary/90 pulse-cta">
+          <Button onClick={() => setSmartListingOpen(true)} className="gap-2 rounded-full bg-tertiary text-tertiary-foreground hover:bg-tertiary/90 pulse-cta">
             <Upload className="h-4 w-4" /> Upload Pakaian
           </Button>
+          <SmartListing open={smartListingOpen} onOpenChange={setSmartListingOpen} />
           {mounted && (
             <Popover>
               <PopoverTrigger asChild>
