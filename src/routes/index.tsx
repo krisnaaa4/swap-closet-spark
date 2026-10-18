@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { SwapMeOut } from "@/components/SwapMeOut";
 import { SwipeDeck } from "@/components/SwipeDeck";
 import { ClothesRequests } from "@/components/ClothesRequests";
+import { SmartListing } from "@/components/SmartListing";
 
 
 import heroImg from "@/assets/hero-match.jpg";
