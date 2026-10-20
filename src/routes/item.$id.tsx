@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { SwapOfferPicker, OfferSummary, type SwapOffer } from "@/components/SwapOfferPicker";
 import { useState } from "react";
 import {
   Heart, Leaf, MapPin, Star, ArrowLeft, QrCode, ShieldCheck,
