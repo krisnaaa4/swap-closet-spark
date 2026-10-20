@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { SwapMeOut } from "@/components/SwapMeOut";
+import { SwapOfferPicker, OfferSummary, type SwapOffer } from "@/components/SwapOfferPicker";
 import { SwipeDeck } from "@/components/SwipeDeck";
 import { ClothesRequests } from "@/components/ClothesRequests";
 import { SmartListing } from "@/components/SmartListing";
@@ -324,6 +325,7 @@ function HowItWorks() {
 function Catalog() {
   const [tab, setTab] = useState<"Semua" | "Pria" | "Wanita">("Semua");
   const [open, setOpen] = useState<{ item: Item; mode: "Swap" | "Beli" | "Sewa" } | null>(null);
+  const [offer, setOffer] = useState<SwapOffer | null>(null);
   const items = useMemo(() => tab === "Semua" ? ITEMS : ITEMS.filter(i => i.gender === tab), [tab]);
 
   return (
@@ -386,9 +388,18 @@ function Catalog() {
         </div>
       </div>
 
-      <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
+      <Dialog open={!!open} onOpenChange={(o) => { if (!o) { setOpen(null); setOffer(null); } }}>
         <DialogContent className="max-w-md">
-          {open && (
+          {open && open.mode === "Swap" && !offer && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-display text-2xl">Pilih Kartu Koleksimu</DialogTitle>
+                <DialogDescription>Langkah 1 dari 2 · Tawarkan pakaianmu untuk swap</DialogDescription>
+              </DialogHeader>
+              <SwapOfferPicker target={open.item} onConfirm={setOffer} />
+            </>
+          )}
+          {open && (open.mode !== "Swap" || offer) && (
             <>
               <DialogHeader>
                 <DialogTitle className="font-display text-2xl">
@@ -406,6 +417,7 @@ function Catalog() {
                   <p className="mt-1 text-xs">Size {open.item.size} · {open.item.rating}/10</p>
                 </div>
               </div>
+              {offer && <OfferSummary offer={offer} onEdit={() => setOffer(null)} />}
               <div className="space-y-2 text-sm">
                 {open.mode === "Swap" && <Row label="Token Swap" value="50 TKN" />}
                 {open.mode === "Beli" && <Row label="Harga Preloved" value="Rp 165.000" />}
