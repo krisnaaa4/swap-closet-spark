@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { SwapOfferPicker, OfferSummary, type SwapOffer } from "@/components/SwapOfferPicker";
 import { useState } from "react";
 import {
   Heart, Leaf, MapPin, Star, ArrowLeft, QrCode, ShieldCheck,
@@ -52,6 +53,7 @@ function ItemDetail() {
   const { id } = Route.useParams();
   const item = ITEMS.find(i => i.id === id)!;
   const [mode, setMode] = useState<"Swap" | "Beli" | "Sewa" | null>(null);
+  const [offer, setOffer] = useState<SwapOffer | null>(null);
   const recommendations = ITEMS.filter(i => i.id !== item.id).slice(0, 4);
 
   return (
@@ -206,9 +208,18 @@ function ItemDetail() {
         </div>
       </section>
 
-      <Dialog open={!!mode} onOpenChange={(o) => !o && setMode(null)}>
+      <Dialog open={!!mode} onOpenChange={(o) => { if (!o) { setMode(null); setOffer(null); } }}>
         <DialogContent className="max-w-md">
-          {mode && (
+          {mode === "Swap" && !offer && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-display text-2xl">Pilih Kartu Koleksimu</DialogTitle>
+                <DialogDescription>Langkah 1 dari 2 · Tawarkan pakaianmu untuk swap</DialogDescription>
+              </DialogHeader>
+              <SwapOfferPicker target={item} onConfirm={setOffer} />
+            </>
+          )}
+          {mode && (mode !== "Swap" || offer) && (
             <>
               <DialogHeader>
                 <DialogTitle className="font-display text-2xl">
@@ -226,6 +237,7 @@ function ItemDetail() {
                   <p className="mt-1 text-xs">Size {item.size} · {item.rating}/10</p>
                 </div>
               </div>
+              {offer && <OfferSummary offer={offer} onEdit={() => setOffer(null)} />}
               <div className="space-y-2 text-sm">
                 {mode === "Swap" && <Row label="Token Swap" value="50 TKN" />}
                 {mode === "Beli" && <Row label="Harga Preloved" value="Rp 165.000" />}
