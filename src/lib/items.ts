@@ -18,17 +18,18 @@ export type Item = {
   outfit: string;
   co2: number;
   gender: "Pria" | "Wanita";
+  directExchange?: boolean;
 };
 
 export const ITEMS: Item[] = [
-  { id: "TB-001", img: c1, name: "Vintage Denim Jacket", owner: "Raka P.", loc: "Bandung", size: "L", rating: 9.2, outfit: "Streetwear", co2: 16.2, gender: "Pria" },
+  { id: "TB-001", img: c1, name: "Vintage Denim Jacket", owner: "Raka P.", loc: "Bandung", size: "L", rating: 9.2, outfit: "Streetwear", co2: 16.2, gender: "Pria", directExchange: true },
   { id: "TB-002", img: c2, name: "Cream Knit Sweater", owner: "Anya S.", loc: "Jakarta", size: "M", rating: 9.5, outfit: "Cozy Daily", co2: 8.4, gender: "Wanita" },
   { id: "TB-003", img: c3, name: "Batik Modern Shirt", owner: "Dimas R.", loc: "Yogyakarta", size: "L", rating: 8.8, outfit: "Smart Casual", co2: 6.1, gender: "Pria" },
-  { id: "TB-004", img: c4, name: "Floral Summer Dress", owner: "Sari M.", loc: "Bali", size: "S", rating: 9.0, outfit: "Vacation", co2: 5.7, gender: "Wanita" },
+  { id: "TB-004", img: c4, name: "Floral Summer Dress", owner: "Sari M.", loc: "Bali", size: "S", rating: 9.0, outfit: "Vacation", co2: 5.7, gender: "Wanita", directExchange: true },
   { id: "TB-005", img: c5, name: "Essential White Tee", owner: "Bayu N.", loc: "Surabaya", size: "M", rating: 8.5, outfit: "Basics", co2: 4.2, gender: "Pria" },
   { id: "TB-006", img: c6, name: "Leather Bomber Jacket", owner: "Iqbal F.", loc: "Jakarta", size: "L", rating: 9.4, outfit: "Edgy Layer", co2: 18.6, gender: "Pria" },
   { id: "TB-007", img: c7, name: "Pleated Midi Skirt", owner: "Tasya W.", loc: "Tangerang", size: "M", rating: 9.1, outfit: "Office Chic", co2: 7.3, gender: "Wanita" },
-  { id: "TB-008", img: c8, name: "Linen Oversize Shirt", owner: "Kayla H.", loc: "Depok", size: "L", rating: 9.0, outfit: "Resort Wear", co2: 9.5, gender: "Wanita" },
+  { id: "TB-008", img: c8, name: "Linen Oversize Shirt", owner: "Kayla H.", loc: "Depok", size: "L", rating: 9.0, outfit: "Resort Wear", co2: 9.5, gender: "Wanita", directExchange: true },
 ];
 
 export function co2ToAcHours(kg: number): string {

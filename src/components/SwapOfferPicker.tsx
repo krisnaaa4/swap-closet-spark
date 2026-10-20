@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Minus, Plus, Layers } from "lucide-react";
+import { Check, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ITEMS, type Item } from "@/lib/items";
+import { isValidSwapSelection, toggleSwapSelection } from "@/lib/swap-rules";
 
 export type SwapOffer = { item: Item; qty: number }[];
 
@@ -19,66 +20,53 @@ export function SwapOfferPicker({
   onConfirm: (offer: SwapOffer) => void;
 }) {
   const collection = myCollection(target.id);
-  const [counts, setCounts] = useState<Record<string, number>>({});
-  const total = Object.values(counts).reduce((s, n) => s + n, 0);
-
-  const change = (id: string, d: number) =>
-    setCounts(c => {
-      const n = Math.max(0, Math.min(9, (c[id] ?? 0) + d));
-      return { ...c, [id]: n };
-    });
+  const [selected, setSelected] = useState<string[]>([]);
+  const total = selected.length;
+  const direct = !!target.directExchange;
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
         Pilih kartu dari koleksimu untuk ditawarkan sebagai ganti <strong className="text-primary">{target.name}</strong>.
-        Kamu boleh memilih lebih dari satu, termasuk kartu yang sama.
+        {direct ? " Pilih tepat satu pakaian. Tidak perlu persetujuan pemilik." : " Pilih satu atau lebih pakaian berbeda. Maksimal satu untuk setiap pakaian; pemilik perlu menyetujui tawaranmu."}
       </p>
+      <p className="text-xs text-muted-foreground">Koleksi contoh · belum terhubung ke lemari akunmu.</p>
       <div className="grid max-h-[50vh] grid-cols-3 gap-3 overflow-y-auto pr-1">
         {collection.map(it => {
-          const n = counts[it.id] ?? 0;
+          const picked = selected.includes(it.id);
           return (
             <div
               key={it.id}
               className={cn(
-                "relative overflow-hidden rounded-xl border-2 bg-card transition",
-                n > 0 ? "-translate-y-1 border-tertiary shadow-lg" : "border-border",
+                "relative overflow-hidden rounded-lg border-2 bg-card transition",
+                picked ? "border-tertiary shadow-lg" : "border-border",
               )}
             >
-              <button type="button" onClick={() => change(it.id, 1)} className="block w-full text-left">
+              <Button type="button" variant="ghost" aria-label={`Pilih ${it.name}`} aria-pressed={picked} onClick={() => setSelected(s => toggleSwapSelection(s, it.id, direct))} className="block h-auto w-full whitespace-normal p-0 text-left hover:bg-secondary">
                 <img src={it.img} alt={it.name} className="h-24 w-full object-cover" />
                 <div className="p-2">
                   <p className="line-clamp-1 text-xs font-semibold text-primary">{it.name}</p>
                   <p className="text-[10px] text-muted-foreground">Size {it.size}</p>
                 </div>
-              </button>
-              {n > 0 && (
+              </Button>
+              {picked && (
                 <span className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-tertiary text-xs font-bold text-tertiary-foreground">
-                  ×{n}
+                  <Check className="h-4 w-4" />
                 </span>
               )}
-              <div className="flex items-center justify-between border-t border-border px-1.5 py-1">
-                <button type="button" aria-label={`Kurangi ${it.name}`} onClick={() => change(it.id, -1)} disabled={!n} className="rounded p-1 disabled:opacity-30">
-                  <Minus className="h-3 w-3" />
-                </button>
-                <span className="text-xs font-semibold">{n}</span>
-                <button type="button" aria-label={`Tambah ${it.name}`} onClick={() => change(it.id, 1)} className="rounded p-1">
-                  <Plus className="h-3 w-3" />
-                </button>
-              </div>
             </div>
           );
         })}
       </div>
       <Button
-        disabled={!total}
+        disabled={!isValidSwapSelection(selected, direct)}
         onClick={() =>
-          onConfirm(collection.filter(i => counts[i.id]).map(i => ({ item: i, qty: counts[i.id] })))
+          onConfirm(collection.filter(i => selected.includes(i.id)).map(i => ({ item: i, qty: 1 })))
         }
         className="w-full rounded-full bg-coral text-coral-foreground hover:bg-coral/90"
       >
         <Layers className="mr-2 h-4 w-4" />
-        {total ? `Tawarkan ${total} kartu` : "Pilih minimal 1 kartu"}
+        {total ? (direct ? "Lanjutkan ke pembayaran" : `Tinjau ${total} pakaian`) : "Pilih pakaian"}
       </Button>
     </div>
   );
@@ -89,7 +77,7 @@ export function OfferSummary({ offer, onEdit }: { offer: SwapOffer; onEdit: () =
     <div className="rounded-xl border border-border p-3">
       <div className="mb-2 flex items-center justify-between text-xs">
         <span className="font-semibold text-primary">Kartu yang kamu tawarkan</span>
-        <button type="button" onClick={onEdit} className="font-semibold text-tertiary underline underline-offset-2">Ubah</button>
+        <Button type="button" variant="link" size="sm" onClick={onEdit}>Ubah</Button>
       </div>
       <div className="flex flex-wrap gap-2">
         {offer.map(o => (
