@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { ITEMS, co2ToAcHours, type Item } from "@/lib/items";
+import { TransactionDialog } from "@/components/TransactionDialog";
+import { ExchangeTag } from "@/components/ExchangeTag";
 
 const donationSchema = z.object({
   name: z.string().trim().min(2, "Nama minimal 2 karakter").max(100, "Nama terlalu panjang"),
@@ -52,13 +54,15 @@ export function SwipeDeck() {
   const [drag, setDrag] = useState({ x: 0, y: 0, active: false });
   const start = useRef({ x: 0, y: 0 });
   const [formOpen, setFormOpen] = useState(false);
+  const [swapTarget, setSwapTarget] = useState<Item | null>(null);
 
   const current = deck[index];
   const matches = history.filter(h => h.liked);
   const done = index >= deck.length;
 
   const decide = (liked: boolean) => {
-    if (!current || fly) return;
+    if (!current || fly || swapTarget) return;
+    if (liked) setSwapTarget(current);
     setFly(liked ? "right" : "left");
     setDrag({ x: 0, y: 0, active: false });
     window.setTimeout(() => {
@@ -238,6 +242,7 @@ export function SwipeDeck() {
                       )}
                     </div>
                     <div className="p-5">
+                      <ExchangeTag item={item} />
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <h3 className="font-display text-xl font-bold text-primary">{item.name}</h3>
@@ -300,6 +305,7 @@ export function SwipeDeck() {
         </div>
       </div>
 
+      <TransactionDialog transaction={swapTarget ? { item: swapTarget, mode: "Swap" } : null} onClose={() => setSwapTarget(null)} />
       <DonationForm open={formOpen} onOpenChange={setFormOpen} />
     </section>
   );

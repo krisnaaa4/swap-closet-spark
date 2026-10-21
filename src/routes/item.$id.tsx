@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { SwapOfferPicker, OfferSummary, type SwapOffer } from "@/components/SwapOfferPicker";
+import { TransactionDialog } from "@/components/TransactionDialog";
+import { ExchangeTag } from "@/components/ExchangeTag";
 import { useState } from "react";
 import {
   Heart, Leaf, MapPin, Star, ArrowLeft, QrCode, ShieldCheck,
@@ -26,7 +27,8 @@ export const Route = createFileRoute("/item/$id")({
         { name: "description", content: desc },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
-        ...(item ? [{ property: "og:image", content: item.img }] : []),
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },
@@ -51,9 +53,9 @@ export const Route = createFileRoute("/item/$id")({
 
 function ItemDetail() {
   const { id } = Route.useParams();
-  const item = ITEMS.find(i => i.id === id)!;
+  const item = ITEMS.find(i => i.id === id);
   const [mode, setMode] = useState<"Swap" | "Beli" | "Sewa" | null>(null);
-  const [offer, setOffer] = useState<SwapOffer | null>(null);
+  if (!item) return null;
   const recommendations = ITEMS.filter(i => i.id !== item.id).slice(0, 4);
 
   return (
@@ -66,9 +68,9 @@ function ItemDetail() {
             </span>
             <span className="font-display text-xl font-bold tracking-tight">Tukar Baju</span>
           </Link>
-          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground">
+          <div className="flex flex-wrap gap-4"><Link to="/swap-diajukan" className="text-sm font-medium">Swap Diajukan</Link><Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground">
             <ArrowLeft className="h-4 w-4" /> Kembali ke katalog
-          </Link>
+          </Link></div>
         </div>
       </header>
 
@@ -105,7 +107,7 @@ function ItemDetail() {
           </div>
 
           <div className="flex flex-col">
-            <Badge className="w-fit bg-tertiary/15 text-tertiary hover:bg-tertiary/15">{item.outfit}</Badge>
+            <div className="flex flex-wrap gap-2"><Badge className="w-fit bg-tertiary/15 text-tertiary hover:bg-tertiary/15">{item.outfit}</Badge><ExchangeTag item={item} /></div>
             <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-primary lg:text-5xl">
               {item.name}
             </h1>
@@ -197,6 +199,7 @@ function ItemDetail() {
                     </div>
                   </div>
                   <p className="mt-0.5 text-xs text-muted-foreground">{rec.outfit}</p>
+                  <div className="mt-2"><ExchangeTag item={rec} /></div>
                   <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
                     <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {rec.loc}</span>
                     <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-primary">Size {rec.size}</span>
@@ -208,53 +211,7 @@ function ItemDetail() {
         </div>
       </section>
 
-      <Dialog open={!!mode} onOpenChange={(o) => { if (!o) { setMode(null); setOffer(null); } }}>
-        <DialogContent className="max-w-md">
-          {mode === "Swap" && !offer && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="font-display text-2xl">Pilih Kartu Koleksimu</DialogTitle>
-                <DialogDescription>Langkah 1 dari 2 · Tawarkan pakaianmu untuk swap</DialogDescription>
-              </DialogHeader>
-              <SwapOfferPicker target={item} onConfirm={setOffer} />
-            </>
-          )}
-          {mode && (mode !== "Swap" || offer) && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="font-display text-2xl">
-                  {mode === "Swap" && "Ajukan Swap"}
-                  {mode === "Beli" && "Beli Preloved"}
-                  {mode === "Sewa" && "Sewa Outfit"}
-                </DialogTitle>
-                <DialogDescription>Konfirmasi transaksi {item.name}</DialogDescription>
-              </DialogHeader>
-              <div className="flex gap-4 rounded-xl border border-border bg-secondary/40 p-3">
-                <img src={item.img} alt="" className="h-20 w-16 rounded-lg object-cover" />
-                <div className="text-sm">
-                  <p className="font-semibold text-primary">{item.name}</p>
-                  <p className="text-xs text-muted-foreground">{item.owner} · {item.loc}</p>
-                  <p className="mt-1 text-xs">Size {item.size} · {item.rating}/10</p>
-                </div>
-              </div>
-              {offer && <OfferSummary offer={offer} onEdit={() => setOffer(null)} />}
-              <div className="space-y-2 text-sm">
-                {mode === "Swap" && <Row label="Token Swap" value="50 TKN" />}
-                {mode === "Beli" && <Row label="Harga Preloved" value="Rp 165.000" />}
-                {mode === "Sewa" && <Row label="Sewa 3 hari" value="Rp 75.000" />}
-                <Row label="Biaya logistik" value="Rp 18.000" />
-                <Row label="Carbon dihemat vs beli baru" value={`${item.co2} kg CO₂`} accent />
-              </div>
-              <div className="rounded-xl bg-eco/10 p-3 text-xs text-eco">
-                <Leaf className="mr-1 inline h-3.5 w-3.5" /> Setara dengan {co2ToAcHours(item.co2)}.
-              </div>
-              <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
-                Lanjutkan ke QRIS <QrCode className="ml-2 h-4 w-4" />
-              </Button>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      <TransactionDialog transaction={mode ? { item, mode } : null} onClose={() => setMode(null)} />
     </div>
   );
 }

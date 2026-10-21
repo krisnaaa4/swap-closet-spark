@@ -1,22 +1,23 @@
-import { describe, expect, test } from "bun:test";
+import { describe, test } from "node:test";
+import assert from "node:assert/strict";
 import { canPayForSwap, isValidSwapSelection, toggleSwapSelection } from "./swap-rules";
 
 describe("swap selection and approval", () => {
   test("direct exchange offers exactly one garment", () => {
-    expect(toggleSwapSelection(["shirt"], "jacket", true)).toEqual(["jacket"]);
-    expect(isValidSwapSelection(["shirt", "jacket"], true)).toBe(false);
-    expect(canPayForSwap(true, ["jacket"])).toBe(true);
-    expect(canPayForSwap(true, [])).toBe(false);
+    assert.deepEqual(toggleSwapSelection(["shirt"], "jacket", true), ["jacket"]);
+    assert.equal(isValidSwapSelection(["shirt", "jacket"], true), false);
+    assert.equal(canPayForSwap(true, ["jacket"]), true);
+    assert.equal(canPayForSwap(true, []), false);
   });
   test("owner approval accepts multiple unique garments but no duplicates", () => {
-    expect(toggleSwapSelection(["shirt"], "jacket", false)).toEqual(["shirt", "jacket"]);
-    expect(toggleSwapSelection(["shirt"], "shirt", false)).toEqual([]);
-    expect(isValidSwapSelection(["shirt", "jacket"], false)).toBe(true);
-    expect(isValidSwapSelection(["shirt", "shirt"], false)).toBe(false);
-    expect(isValidSwapSelection([], false)).toBe(false);
+    assert.deepEqual(toggleSwapSelection(["shirt"], "jacket", false), ["shirt", "jacket"]);
+    assert.deepEqual(toggleSwapSelection(["shirt"], "shirt", false), []);
+    assert.equal(isValidSwapSelection(["shirt", "jacket"], false), true);
+    assert.equal(isValidSwapSelection(["shirt", "shirt"], false), false);
+    assert.equal(isValidSwapSelection([], false), false);
   });
   test("owner approval requests never allow payment before approval", () => {
-    expect(canPayForSwap(false, ["shirt"])).toBe(false);
-    expect(canPayForSwap(false, ["shirt", "jacket"])).toBe(false);
+    assert.equal(canPayForSwap(false, ["shirt"]), false);
+    assert.equal(canPayForSwap(false, ["shirt", "jacket"]), false);
   });
 });
