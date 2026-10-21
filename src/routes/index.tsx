@@ -17,22 +17,15 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { SwapMeOut } from "@/components/SwapMeOut";
-import { SwapOfferPicker, OfferSummary, type SwapOffer } from "@/components/SwapOfferPicker";
+import { TransactionDialog, type Transaction } from "@/components/TransactionDialog";
+import { ExchangeTag } from "@/components/ExchangeTag";
+import { ITEMS, co2ToAcHours, type Item } from "@/lib/items";
 import { SwipeDeck } from "@/components/SwipeDeck";
 import { ClothesRequests } from "@/components/ClothesRequests";
 import { SmartListing } from "@/components/SmartListing";
 
 
 import heroImg from "@/assets/hero-match.jpg";
-import c1 from "@/assets/c1.jpg";
-import c2 from "@/assets/c2.jpg";
-import c3 from "@/assets/c3.jpg";
-import c4 from "@/assets/c4.jpg";
-import c5 from "@/assets/c5.jpg";
-import c6 from "@/assets/c6.jpg";
-import c7 from "@/assets/c7.jpg";
-import c8 from "@/assets/c8.jpg";
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -40,33 +33,12 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Platform sirkular tekstil Indonesia. Tukar outfit, kumpulkan Token Swap, dan kurangi 2,3 juta ton sampah tekstil per tahun." },
       { property: "og:title", content: "Tukar Baju — Swap, Donasi, Daur Ulang" },
       { property: "og:description", content: "Tukar pakaian dengan orang sekitarmu. Bukan landfill, tapi sistemnya yang kami benahi." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
 });
-
-type Item = {
-  id: string; img: string; name: string; owner: string; loc: string;
-  size: string; rating: number; outfit: string; co2: number; gender: "Pria" | "Wanita";
-};
-
-const ITEMS: Item[] = [
-  { id: "TB-001", img: c1, name: "Vintage Denim Jacket", owner: "Raka P.", loc: "Bandung", size: "L", rating: 9.2, outfit: "Streetwear", co2: 16.2, gender: "Pria" },
-  { id: "TB-002", img: c2, name: "Cream Knit Sweater", owner: "Anya S.", loc: "Jakarta", size: "M", rating: 9.5, outfit: "Cozy Daily", co2: 8.4, gender: "Wanita" },
-  { id: "TB-003", img: c3, name: "Batik Modern Shirt", owner: "Dimas R.", loc: "Yogyakarta", size: "L", rating: 8.8, outfit: "Smart Casual", co2: 6.1, gender: "Pria" },
-  { id: "TB-004", img: c4, name: "Floral Summer Dress", owner: "Sari M.", loc: "Bali", size: "S", rating: 9.0, outfit: "Vacation", co2: 5.7, gender: "Wanita" },
-  { id: "TB-005", img: c5, name: "Essential White Tee", owner: "Bayu N.", loc: "Surabaya", size: "M", rating: 8.5, outfit: "Basics", co2: 4.2, gender: "Pria" },
-  { id: "TB-006", img: c6, name: "Leather Bomber Jacket", owner: "Iqbal F.", loc: "Jakarta", size: "L", rating: 9.4, outfit: "Edgy Layer", co2: 18.6, gender: "Pria" },
-  { id: "TB-007", img: c7, name: "Pleated Midi Skirt", owner: "Tasya W.", loc: "Tangerang", size: "M", rating: 9.1, outfit: "Office Chic", co2: 7.3, gender: "Wanita" },
-  { id: "TB-008", img: c8, name: "Linen Oversize Shirt", owner: "Kayla H.", loc: "Depok", size: "L", rating: 9.0, outfit: "Resort Wear", co2: 9.5, gender: "Wanita" },
-];
-
-function co2ToAcHours(kg: number): string {
-  const hours = kg / 0.75; // 1 PK AC ≈ 0.75 kg CO₂/jam
-  if (hours >= 8760) return `${(hours / 8760).toFixed(0)} tahun menyalakan AC 1 PK`;
-  if (hours >= 24) return `${(hours / 24).toFixed(0)} hari menyalakan AC 1 PK`;
-  return `${hours.toFixed(1)} jam menyalakan AC 1 PK`;
-}
 
 function Home() {
   return (
@@ -137,6 +109,7 @@ function Nav() {
               </PopoverTrigger>
               <PopoverContent className="w-52 p-2" align="end">
                 <div className="space-y-1">
+                  <Link to="/swap-diajukan" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><ClipboardList className="h-4 w-4" /> Swap Diajukan</Link>
                   <Link to="/auth" search={{ tab: "masuk" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
                     <LogIn className="h-4 w-4 text-tertiary" /> Masuk
                   </Link>
@@ -324,8 +297,7 @@ function HowItWorks() {
 /* ---------- CATALOG ---------- */
 function Catalog() {
   const [tab, setTab] = useState<"Semua" | "Pria" | "Wanita">("Semua");
-  const [open, setOpen] = useState<{ item: Item; mode: "Swap" | "Beli" | "Sewa" } | null>(null);
-  const [offer, setOffer] = useState<SwapOffer | null>(null);
+  const [open, setOpen] = useState<Transaction | null>(null);
   const items = useMemo(() => tab === "Semua" ? ITEMS : ITEMS.filter(i => i.gender === tab), [tab]);
 
   return (
@@ -378,6 +350,7 @@ function Catalog() {
                   </div>
                 </div>
                 <p className="mt-0.5 text-xs text-muted-foreground">{item.outfit}</p>
+                <div className="mt-2"><ExchangeTag item={item} /></div>
                 <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
                   <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {item.owner} · {item.loc}</span>
                   <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-primary">Size {item.size}</span>
@@ -388,53 +361,7 @@ function Catalog() {
         </div>
       </div>
 
-      <Dialog open={!!open} onOpenChange={(o) => { if (!o) { setOpen(null); setOffer(null); } }}>
-        <DialogContent className="max-w-md">
-          {open && open.mode === "Swap" && !offer && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="font-display text-2xl">Pilih Kartu Koleksimu</DialogTitle>
-                <DialogDescription>Langkah 1 dari 2 · Tawarkan pakaianmu untuk swap</DialogDescription>
-              </DialogHeader>
-              <SwapOfferPicker target={open.item} onConfirm={setOffer} />
-            </>
-          )}
-          {open && (open.mode !== "Swap" || offer) && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="font-display text-2xl">
-                  {open.mode === "Swap" && "Ajukan Swap"}
-                  {open.mode === "Beli" && "Beli Preloved"}
-                  {open.mode === "Sewa" && "Sewa Outfit"}
-                </DialogTitle>
-                <DialogDescription>Konfirmasi transaksi {open.item.name}</DialogDescription>
-              </DialogHeader>
-              <div className="flex gap-4 rounded-xl border border-border bg-secondary/40 p-3">
-                <img src={open.item.img} alt="" className="h-20 w-16 rounded-lg object-cover" />
-                <div className="text-sm">
-                  <p className="font-semibold text-primary">{open.item.name}</p>
-                  <p className="text-xs text-muted-foreground">{open.item.owner} · {open.item.loc}</p>
-                  <p className="mt-1 text-xs">Size {open.item.size} · {open.item.rating}/10</p>
-                </div>
-              </div>
-              {offer && <OfferSummary offer={offer} onEdit={() => setOffer(null)} />}
-              <div className="space-y-2 text-sm">
-                {open.mode === "Swap" && <Row label="Token Swap" value="50 TKN" />}
-                {open.mode === "Beli" && <Row label="Harga Preloved" value="Rp 165.000" />}
-                {open.mode === "Sewa" && <Row label="Sewa 3 hari" value="Rp 75.000" />}
-                <Row label="Biaya logistik" value="Rp 18.000" />
-                <Row label="Carbon dihemat vs beli baru" value={`${open.item.co2} kg CO₂`} accent />
-              </div>
-              <div className="rounded-xl bg-eco/10 p-3 text-xs text-eco">
-                <Leaf className="mr-1 inline h-3.5 w-3.5" /> Setara dengan {co2ToAcHours(open.item.co2)}.
-              </div>
-              <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
-                Lanjutkan ke QRIS <QrCode className="ml-2 h-4 w-4" />
-              </Button>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      <TransactionDialog transaction={open} onClose={() => setOpen(null)} />
     </section>
   );
 }

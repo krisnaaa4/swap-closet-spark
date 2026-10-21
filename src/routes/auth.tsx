@@ -9,6 +9,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 
 export const Route = createFileRoute("/auth")({
+  head: () => ({ meta: [
+    { title: "Masuk & Daftar — Tukar Baju" },
+    { name: "description", content: "Masuk atau buat akun Tukar Baju untuk bergabung dengan komunitas pakaian sirkular." },
+    { property: "og:title", content: "Masuk & Daftar — Tukar Baju" },
+    { property: "og:description", content: "Bergabung dengan komunitas Tukar Baju." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: AuthPage,
   validateSearch: (search: Record<string, unknown>) => ({
     tab: search.tab === "daftar" ? "daftar" : "masuk",
