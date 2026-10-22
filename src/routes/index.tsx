@@ -108,7 +108,7 @@ function Nav() {
           </Button>
           <SmartListing open={smartListingOpen} onOpenChange={setSmartListingOpen} />
           {mounted && (
-            <Popover>
+            <Popover open={accountOpen} onOpenChange={setAccountOpen}>
               <PopoverTrigger asChild>
                 {user ? (
                   <Button variant="ghost" size="icon" className="ml-1 rounded-full bg-secondary text-primary hover:bg-secondary/80">
@@ -126,8 +126,10 @@ function Nav() {
               </PopoverTrigger>
               <PopoverContent className="w-52 p-2" align="end">
                 <div className="space-y-1">
-                  <Link to="/permintaan" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Heart className="h-4 w-4" /> Clothes Request</Link>
-                  <Link to="/swap-diajukan" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><ClipboardList className="h-4 w-4" /> Swap Diajukan</Link>
+                  <a href="#katalog" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Shirt className="h-4 w-4 text-tertiary" /> Koleksi Outfit</a>
+                  <Link to="/koleksiku" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Package className="h-4 w-4 text-eco" /> Koleksiku</Link>
+                  <Link to="/permintaan" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Heart className="h-4 w-4" /> Clothes Request</Link>
+                  <Link to="/swap-diajukan" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><ClipboardList className="h-4 w-4" /> Swap Diajukan</Link>
                   {user ? (
                     <>
                       <div className="px-3 py-2">
