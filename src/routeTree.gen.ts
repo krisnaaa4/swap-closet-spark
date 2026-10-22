@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as B2bRouteImport } from './routes/b2b'
+import { Route as KoleksikuRouteImport } from './routes/koleksiku'
 import { Route as PermintaanRouteImport } from './routes/permintaan'
 import { Route as SwapDiajukanRouteImport } from './routes/swap-diajukan'
 import { Route as ItemIdRouteImport } from './routes/item.$id'
@@ -29,6 +30,11 @@ const AuthRoute = AuthRouteImport.update({
 const B2bRoute = B2bRouteImport.update({
   id: '/b2b',
   path: '/b2b',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KoleksikuRoute = KoleksikuRouteImport.update({
+  id: '/koleksiku',
+  path: '/koleksiku',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PermintaanRoute = PermintaanRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/b2b': typeof B2bRoute
+  '/koleksiku': typeof KoleksikuRoute
   '/permintaan': typeof PermintaanRoute
   '/swap-diajukan': typeof SwapDiajukanRoute
   '/item/$id': typeof ItemIdRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/b2b': typeof B2bRoute
+  '/koleksiku': typeof KoleksikuRoute
   '/permintaan': typeof PermintaanRoute
   '/swap-diajukan': typeof SwapDiajukanRoute
   '/item/$id': typeof ItemIdRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/b2b': typeof B2bRoute
+  '/koleksiku': typeof KoleksikuRoute
   '/permintaan': typeof PermintaanRoute
   '/swap-diajukan': typeof SwapDiajukanRoute
   '/item/$id': typeof ItemIdRoute
@@ -75,14 +84,28 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/b2b' | '/permintaan' | '/swap-diajukan' | '/item/$id'
+    | '/'
+    | '/auth'
+    | '/b2b'
+    | '/koleksiku'
+    | '/permintaan'
+    | '/swap-diajukan'
+    | '/item/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/b2b' | '/permintaan' | '/swap-diajukan' | '/item/$id'
+  to:
+    | '/'
+    | '/auth'
+    | '/b2b'
+    | '/koleksiku'
+    | '/permintaan'
+    | '/swap-diajukan'
+    | '/item/$id'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/b2b'
+    | '/koleksiku'
     | '/permintaan'
     | '/swap-diajukan'
     | '/item/$id'
@@ -92,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   B2bRoute: typeof B2bRoute
+  KoleksikuRoute: typeof KoleksikuRoute
   PermintaanRoute: typeof PermintaanRoute
   SwapDiajukanRoute: typeof SwapDiajukanRoute
   ItemIdRoute: typeof ItemIdRoute
@@ -118,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/b2b'
       fullPath: '/b2b'
       preLoaderRoute: typeof B2bRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/koleksiku': {
+      id: '/koleksiku'
+      path: '/koleksiku'
+      fullPath: '/koleksiku'
+      preLoaderRoute: typeof KoleksikuRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/permintaan': {
@@ -148,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   B2bRoute: B2bRoute,
+  KoleksikuRoute: KoleksikuRoute,
   PermintaanRoute: PermintaanRoute,
   SwapDiajukanRoute: SwapDiajukanRoute,
   ItemIdRoute: ItemIdRoute,

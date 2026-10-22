@@ -73,6 +73,7 @@ function Nav() {
   const { user } = useAuthUser();
   const router = useRouter();
   const [smartListingOpen, setSmartListingOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   async function handleSignOut() {
     await supabase.auth.signOut();
@@ -89,7 +90,7 @@ function Nav() {
           <span className="font-display text-xl font-bold tracking-tight">Tukar Baju</span>
         </a>
         <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
-          {["Koleksi Outfit", "Donasi", "Daur Ulang"].map((l) => (
+          {["Donasi", "Daur Ulang"].map((l) => (
             <a key={l} href="#" className="relative text-foreground/80 transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-tertiary after:transition-all hover:after:w-full">
               {l}
             </a>
@@ -107,7 +108,7 @@ function Nav() {
           </Button>
           <SmartListing open={smartListingOpen} onOpenChange={setSmartListingOpen} />
           {mounted && (
-            <Popover>
+            <Popover open={accountOpen} onOpenChange={setAccountOpen}>
               <PopoverTrigger asChild>
                 {user ? (
                   <Button variant="ghost" size="icon" className="ml-1 rounded-full bg-secondary text-primary hover:bg-secondary/80">
@@ -125,8 +126,10 @@ function Nav() {
               </PopoverTrigger>
               <PopoverContent className="w-52 p-2" align="end">
                 <div className="space-y-1">
-                  <Link to="/permintaan" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Heart className="h-4 w-4" /> Clothes Request</Link>
-                  <Link to="/swap-diajukan" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><ClipboardList className="h-4 w-4" /> Swap Diajukan</Link>
+                  <a href="#katalog" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Shirt className="h-4 w-4 text-tertiary" /> Koleksi Outfit</a>
+                  <Link to="/koleksiku" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Package className="h-4 w-4 text-eco" /> Koleksiku</Link>
+                  <Link to="/permintaan" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Heart className="h-4 w-4" /> Clothes Request</Link>
+                  <Link to="/swap-diajukan" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><ClipboardList className="h-4 w-4" /> Swap Diajukan</Link>
                   {user ? (
                     <>
                       <div className="px-3 py-2">
