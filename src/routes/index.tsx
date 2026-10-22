@@ -94,9 +94,6 @@ function Nav() {
               {l}
             </a>
           ))}
-          <Link to="/permintaan" className="relative text-foreground/80 transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-tertiary after:transition-all hover:after:w-full">
-            Clothes Request
-          </Link>
           <Link to="/b2b" className="relative text-foreground/80 transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-tertiary after:transition-all hover:after:w-full">
             B2B Portal
           </Link>
@@ -128,6 +125,7 @@ function Nav() {
               </PopoverTrigger>
               <PopoverContent className="w-52 p-2" align="end">
                 <div className="space-y-1">
+                  <Link to="/permintaan" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Heart className="h-4 w-4" /> Clothes Request</Link>
                   <Link to="/swap-diajukan" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><ClipboardList className="h-4 w-4" /> Swap Diajukan</Link>
                   {user ? (
                     <>
