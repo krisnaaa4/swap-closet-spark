@@ -1,13 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import {
   Heart, Sparkles, Upload, Phone, ArrowRight, Check, Leaf,
   Recycle, HandHeart, Shirt, MapPin, Star, ShieldCheck, Truck,
   QrCode, Calculator, Search, ClipboardList, Clock, ThumbsUp,
   Receipt, Package, WashingMachine, Ban, Tag, Calendar,
-  Zap, TrendingUp, Award, ChevronRight, User, LogIn, UserPlus,
+  Zap, TrendingUp, Award, ChevronRight, User, LogIn, UserPlus, LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuthUser } from "@/hooks/use-auth-user";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
