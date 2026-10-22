@@ -73,6 +73,7 @@ function Nav() {
   const { user } = useAuthUser();
   const router = useRouter();
   const [smartListingOpen, setSmartListingOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   async function handleSignOut() {
     await supabase.auth.signOut();
@@ -89,7 +90,7 @@ function Nav() {
           <span className="font-display text-xl font-bold tracking-tight">Tukar Baju</span>
         </a>
         <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
-          {["Koleksi Outfit", "Donasi", "Daur Ulang"].map((l) => (
+          {["Donasi", "Daur Ulang"].map((l) => (
             <a key={l} href="#" className="relative text-foreground/80 transition-colors hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-tertiary after:transition-all hover:after:w-full">
               {l}
             </a>
