@@ -1,13 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import {
   Heart, Sparkles, Upload, Phone, ArrowRight, Check, Leaf,
   Recycle, HandHeart, Shirt, MapPin, Star, ShieldCheck, Truck,
   QrCode, Calculator, Search, ClipboardList, Clock, ThumbsUp,
   Receipt, Package, WashingMachine, Ban, Tag, Calendar,
-  Zap, TrendingUp, Award, ChevronRight, User, LogIn, UserPlus,
+  Zap, TrendingUp, Award, ChevronRight, User, LogIn, UserPlus, LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuthUser } from "@/hooks/use-auth-user";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -68,7 +70,15 @@ function useMounted() {
 
 function Nav() {
   const mounted = useMounted();
+  const { user } = useAuthUser();
+  const router = useRouter();
   const [smartListingOpen, setSmartListingOpen] = useState(false);
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    router.navigate({ to: "/" });
+  }
+
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -102,20 +112,43 @@ function Nav() {
           {mounted && (
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full text-foreground/80 hover:text-foreground hover:bg-secondary ml-1">
-                  <User className="h-5 w-5" />
-                  <span className="sr-only">Akun</span>
-                </Button>
+                {user ? (
+                  <Button variant="ghost" size="icon" className="ml-1 rounded-full bg-secondary text-primary hover:bg-secondary/80">
+                    <span className="font-display text-sm font-bold uppercase">
+                      {(user.user_metadata?.full_name || user.email || "?").charAt(0)}
+                    </span>
+                    <span className="sr-only">Akun</span>
+                  </Button>
+                ) : (
+                  <Button variant="ghost" size="icon" className="ml-1 rounded-full text-foreground/80 hover:text-foreground hover:bg-secondary">
+                    <User className="h-5 w-5" />
+                    <span className="sr-only">Akun</span>
+                  </Button>
+                )}
               </PopoverTrigger>
               <PopoverContent className="w-52 p-2" align="end">
                 <div className="space-y-1">
                   <Link to="/swap-diajukan" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><ClipboardList className="h-4 w-4" /> Swap Diajukan</Link>
-                  <Link to="/auth" search={{ tab: "masuk" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
-                    <LogIn className="h-4 w-4 text-tertiary" /> Masuk
-                  </Link>
-                  <Link to="/auth" search={{ tab: "daftar" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
-                    <UserPlus className="h-4 w-4 text-eco" /> Daftar
-                  </Link>
+                  {user ? (
+                    <>
+                      <div className="px-3 py-2">
+                        <p className="truncate text-xs font-medium text-foreground">{user.email}</p>
+                        <p className="text-[11px] text-muted-foreground">Sudah masuk</p>
+                      </div>
+                      <button onClick={handleSignOut} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-coral hover:bg-secondary">
+                        <LogOut className="h-4 w-4" /> Keluar
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/auth" search={{ tab: "masuk" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                        <LogIn className="h-4 w-4 text-tertiary" /> Masuk
+                      </Link>
+                      <Link to="/auth" search={{ tab: "daftar" }} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                        <UserPlus className="h-4 w-4 text-eco" /> Daftar
+                      </Link>
+                    </>
+                  )}
                 </div>
               </PopoverContent>
             </Popover>
