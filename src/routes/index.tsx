@@ -5,7 +5,7 @@ import {
   Recycle, HandHeart, Shirt, MapPin, Star, ShieldCheck, Truck,
   QrCode, Calculator, Search, ClipboardList, Clock, ThumbsUp,
   Receipt, Package, WashingMachine, Ban, Tag, Calendar,
-  Zap, TrendingUp, Award, ChevronRight, User, LogIn, UserPlus, LogOut,
+  Zap, TrendingUp, Award, ChevronRight, User, LogIn, UserPlus, LogOut, Package as PackageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -127,7 +127,7 @@ function Nav() {
               <PopoverContent className="w-52 p-2" align="end">
                 <div className="space-y-1">
                   <a href="#katalog" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Shirt className="h-4 w-4 text-tertiary" /> Koleksi Outfit</a>
-                  <Link to="/koleksiku" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Package className="h-4 w-4 text-eco" /> Koleksiku</Link>
+                  <Link to="/koleksiku" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><PackageIcon className="h-4 w-4 text-eco" /> Koleksiku</Link>
                   <Link to="/permintaan" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><Heart className="h-4 w-4" /> Clothes Request</Link>
                   <Link to="/swap-diajukan" onClick={() => setAccountOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary"><ClipboardList className="h-4 w-4" /> Swap Diajukan</Link>
                   {user ? (
